@@ -3,11 +3,25 @@
 
 #include "GridSpace.h"
 
+#include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
+#include "Runtime/Engine/Classes/Components/BrushComponent.h"
+
+
 // Sets default values
 AGridSpace::AGridSpace()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+}
+
+// Deconstructor
+void AGridSpace::ClearConnectors()
+{
+	for (int i = 0; i < connectors.Num(); i++)
+	{
+		connectors[i]->Destroy();
+	}
+
 }
 
 // Called when the game starts or when spawned
@@ -33,32 +47,53 @@ int AGridSpace::GetIndex()
 	return index;
 }
 
-void AGridSpace::AddDivider(ADivider* neighbor)
+void AGridSpace::AddConnector(AConnector* neighbor)
 {
-	dividers.Add(neighbor);
+	connectors.Add(neighbor);
 }
 
-void AGridSpace::AddNeighbor(AGridSpace* neighbor)
+AConnector* AGridSpace::AddNeighbor(AGridSpace* neighbor, bool isCorner)
 {
-	ADivider* newDivider = GetWorld()->SpawnActor<ADivider>();
-	newDivider->destination = neighbor;
+	FActorSpawnParameters spawnParams;
 
-	dividers.Add(newDivider);
+	FVector divLoc = (neighbor->GetActorLocation() + this->GetActorLocation()) / 2;
+	divLoc.Z = 15.0f;
+	AConnector* newConnector = GetWorld()->SpawnActor<AConnector>(ConnectorBP, divLoc, FRotator(0.f, 0.f, 0.f), spawnParams);
+
+	newConnector->destination = neighbor;
+	newConnector->isCorner = isCorner;
+	newConnector->SetActorHiddenInGame(true);
+	FString label = this->GetActorLabel();
+	label.Append("-");
+	label.Append(neighbor->GetActorLabel());
+	newConnector->SetActorLabel(label);
+
+	connectors.Add(newConnector);
+
+	return newConnector;
 }
 
-ADivider* AGridSpace::GetNeighbor(int neighborIndex)
+AConnector* AGridSpace::GetNeighbor(int neighborIndex)
 {
-	if (neighborIndex < 0 || neighborIndex >= dividers.Num())
+	if (neighborIndex < 0 || neighborIndex >= connectors.Num())
 	{
 		return NULL;
 	}
 
-	return dividers[neighborIndex];
+	return connectors[neighborIndex];
 }
 
-TArray<ADivider*> AGridSpace::GetNeighbors()
+TArray<AConnector*> AGridSpace::GetNeighbors()
 {
-	return dividers;
+	return connectors;
+}
+
+void AGridSpace::setConnectorVisibility(bool vis)
+{
+	for (int i = 0; i < connectors.Num(); i++)
+	{
+		connectors[i]->SetActorHiddenInGame(!vis);
+	}
 }
 
 
@@ -67,15 +102,35 @@ void AGridSpace::SetHighlight(GridHighlight gh)
 	switch (gh)
 	{
 	case HL_NONE:
+		setConnectorVisibility(false);
 		SetHighlightBP(0);
 		break;
 
 	case HL_SELECTED:
+		setConnectorVisibility(true);
 		SetHighlightBP(1);
 		break;
 
 	case HL_ADJACENT:
+		setConnectorVisibility(false);
 		SetHighlightBP(2);
 		break;
+
+	case HL_CORNER:
+		setConnectorVisibility(false);
+		SetHighlightBP(3);
+		break;
 	}
+}
+
+FString AGridSpace::ToOutputStr()
+{
+	FString outputStr = this->GetActorLabel();
+	outputStr += ",";
+	outputStr += this->GetActorLocation().ToCompactString();
+	outputStr += ",";
+	outputStr += FString::Printf(TEXT("%i%i%i"), roughSpace, allowMove, allowLOS);
+
+
+	return outputStr;
 }

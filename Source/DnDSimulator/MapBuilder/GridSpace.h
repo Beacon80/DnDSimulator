@@ -2,15 +2,17 @@
 
 #pragma once
 
-#include "Divider.h"
+#include "Connector.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GridSpace.generated.h"
 
+UENUM(BlueprintType)
 enum GridHighlight {
 	HL_NONE,
 	HL_SELECTED,
-	HL_ADJACENT
+	HL_ADJACENT,
+	HL_CORNER
 };
 
 UCLASS()
@@ -21,7 +23,6 @@ class DNDSIMULATOR_API AGridSpace : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AGridSpace();
-	//~AGridSpace();
 
 	UFUNCTION(BluePrintImplementableEvent, Category = "Camera")
 		void MoveCameraToSpace();
@@ -29,15 +30,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 		int GetIndex();
 
-	UFUNCTION(BlueprintCallable, Category = "Interaction")
-		void AddDivider(ADivider* neighbor);
-	UFUNCTION(BlueprintCallable, Category = "Interaction")
-		void AddNeighbor(AGridSpace* neighbor);
+	UPROPERTY(EditDefaultsOnly, Category = "ActorSpawning")
+		TSubclassOf<AConnector> ConnectorBP;
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
-		ADivider* GetNeighbor(int index);
+		void AddConnector(AConnector* neighbor);
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
-		TArray<ADivider*> GetNeighbors();
+		AConnector* AddNeighbor(AGridSpace* neighbor, bool isCorner = false);
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+		AConnector* GetNeighbor(int index);
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+		TArray<AConnector*> GetNeighbors();
 
 
 	void SetIndex(int newIndex);
@@ -46,14 +50,28 @@ public:
 	UFUNCTION(BluePrintImplementableEvent, Category = "Camera")
 		void SetHighlightBP(int gh);
 
+	void ClearConnectors();
+
+	UPROPERTY(BlueprintReadOnly, Category = "Grid Space")
+		TArray<AConnector*> connectors;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Grid Space Attribute")
+		bool roughSpace = false;
+	UPROPERTY(BlueprintReadWrite, Category = "Grid Space Attribute")
+		bool allowMove = true;
+	UPROPERTY(BlueprintReadWrite, Category = "Grid Space Attribute")
+		bool allowLOS = true;
+
+	FString ToOutputStr();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	uint64 index;
+	int index;
 
-	TArray<ADivider*> dividers;
+	void setConnectorVisibility(bool vis);
+
 
 public:	
 	// Called every frame

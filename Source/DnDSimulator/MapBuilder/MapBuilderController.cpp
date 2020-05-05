@@ -3,21 +3,19 @@
 
 #include "MapBuilderController.h"
 
-#include "Divider.h"
+#include "Connector.h"
 
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Runtime/Engine/Classes/Components/BrushComponent.h"
+
+#include "HAL/PlatformFilemanager.h"
+#include "GenericPlatform/GenericPlatformFile.h"
+#include "Misc/FileHelper.h"
 
 constexpr float SQUARE_DISTANCE = 100.0f;
 constexpr float HEX_DISTANCE_X = 100.0f;
 constexpr float HEX_DISTANCE_Y = 86.6f; 
 constexpr float ZLOC = 20.0f;
-
-enum SpaceType
-{
-	HEX,
-	SQUARE
-};
 
 // Sets default values
 AMapBuilderController::AMapBuilderController()
@@ -43,9 +41,10 @@ void AMapBuilderController::Tick(float DeltaTime)
 
 }
 
-void AMapBuilderController::SelectSpaceType(FString inputSpaceTypeStr)
+void AMapBuilderController::CreateMap(FString inputSpaceTypeStr, int newDimension)
 {
-	SpaceType inputSpaceType = HEX;
+	dimension = newDimension;
+	inputSpaceType = NONE;
 
 	if (inputSpaceTypeStr == "Hex")
 	{
@@ -57,11 +56,18 @@ void AMapBuilderController::SelectSpaceType(FString inputSpaceTypeStr)
 			BuildHexes();
 		}
 	}
+
 	else if (inputSpaceTypeStr == "Square")
 	{
 		inputSpaceType = SQUARE;
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Square"));
 		BuildSquares();
+	}
+
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Error! Could not read type:"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, inputSpaceTypeStr);
 	}
 }
 
@@ -69,8 +75,7 @@ void AMapBuilderController::ClearSpaces()
 {
 	for (int i = 0; i < gridSpaces.Num(); i++)
 	{
-		//FString outStr = FString::Printf(TEXT("%i: "), i) + gridSpaces[i]->GetName();
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, outStr);
+		gridSpaces[i]->ClearConnectors();
 		gridSpaces[i]->Destroy();
 	}
 
@@ -96,9 +101,11 @@ void AMapBuilderController::BuildHexes()
 			{
 				xLoc += 0.5 * HEX_DISTANCE_Y;
 			}
-			AGridSpace* hexRef = GetWorld()->SpawnActor<AGridSpace>(GridHex, FVector(xLoc, yLoc, ZLOC), FRotator(), spawnParams);
+			AGridSpace* hexRef = GetWorld()->SpawnActor<AGridSpace>(GridHex, FVector(xLoc, yLoc, ZLOC), FRotator(0.f, 0.f, 0.f), spawnParams);
 			int index = gridSpaces.Num();
 			hexRef->SetIndex(index);
+			FString newName = ConvertIndexToCoords(index);
+			hexRef->SetActorLabel(newName);
 			gridSpaces.Add(hexRef);
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f, %f"), xLoc, yLoc));
 
@@ -125,14 +132,30 @@ void AMapBuilderController::BuildSquares()
 		{
 			float xLoc = (float)i * SQUARE_DISTANCE;
 			AGridSpace* hexRef = GetWorld()->SpawnActor<AGridSpace>(GridSquare, FVector(xLoc, yLoc, ZLOC), FRotator(), spawnParams);
-			hexRef->SetIndex(gridSpaces.Num());
+			int index = gridSpaces.Num();
+			hexRef->SetIndex(index);
+			FString newName = ConvertIndexToCoords(index);
+			hexRef->SetActorLabel(newName);
 			gridSpaces.Add(hexRef);
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f, %f"), xLoc, yLoc));
+
+			CalculateNeighborsSquare(index);
 		}
 	}
 
 	int midSpaceIndex = numSpaces / 2;
 	gridSpaces[midSpaceIndex]->MoveCameraToSpace();
+}
+
+FString AMapBuilderController::ConvertIndexToCoords(int index)
+{
+	char xCoord;
+	char yCoord;
+
+	xCoord = 'A' + (index % dimension);
+	yCoord = '1' + (index / dimension);
+
+	return FString::Printf(TEXT("%c%c"), xCoord, yCoord);
 }
 
 void AMapBuilderController::CalculateNeighborsHex(int index)
@@ -142,16 +165,14 @@ void AMapBuilderController::CalculateNeighborsHex(int index)
 	{
 		newNeighbor = gridSpaces[index - 1];
 
-		gridSpaces[index]->AddNeighbor(newNeighbor);
-		newNeighbor->AddNeighbor(gridSpaces[index]);
+		BuildConnectors(gridSpaces[index], newNeighbor);
 	}
 
-	if (index > dimension)
+	if (index >= dimension)
 	{
 		newNeighbor = gridSpaces[index - dimension];
 
-		gridSpaces[index]->AddNeighbor(newNeighbor);
-		newNeighbor->AddNeighbor(gridSpaces[index]);
+		BuildConnectors(gridSpaces[index], newNeighbor);
 
 		if ((index / dimension) % 2 == 1)
 		{
@@ -159,8 +180,7 @@ void AMapBuilderController::CalculateNeighborsHex(int index)
 			{
 				newNeighbor = gridSpaces[index - dimension + 1];
 
-				gridSpaces[index]->AddNeighbor(newNeighbor);
-				newNeighbor->AddNeighbor(gridSpaces[index]);
+				BuildConnectors(gridSpaces[index], newNeighbor);
 			}
 		}
 		else
@@ -169,29 +189,102 @@ void AMapBuilderController::CalculateNeighborsHex(int index)
 			{
 				newNeighbor = gridSpaces[index - dimension - 1];
 
-				gridSpaces[index]->AddNeighbor(newNeighbor);
-				newNeighbor->AddNeighbor(gridSpaces[index]);
+				BuildConnectors(gridSpaces[index], newNeighbor);
 			}
 		}
 	}
 }
 
+void AMapBuilderController::CalculateNeighborsSquare(int index)
+{
+	AGridSpace* newNeighbor;
+	if (index % dimension != 0)
+	{
+		newNeighbor = gridSpaces[index - 1];
+
+		BuildConnectors(gridSpaces[index], newNeighbor);
+	}
+
+	if (index >= dimension)
+	{
+		newNeighbor = gridSpaces[index - dimension];
+
+		BuildConnectors(gridSpaces[index], newNeighbor);
+
+		if (index % dimension != 0)
+		{
+			newNeighbor = gridSpaces[index - dimension - 1];
+
+			BuildConnectors(gridSpaces[index], newNeighbor, true);
+		}
+
+		if (index % dimension != dimension - 1)
+		{
+			newNeighbor = gridSpaces[index - dimension + 1];
+
+			BuildConnectors(gridSpaces[index], newNeighbor, true);
+		}
+	}
+}
+
+void AMapBuilderController::BuildConnectors(AGridSpace* space1, AGridSpace* space2, bool isCorner)
+{
+	AConnector* div1 = space1->AddNeighbor(space2, isCorner);
+	AConnector* div2 = space2->AddNeighbor(space1, isCorner);
+
+	div1->setCounterpart(div2);
+	div2->setCounterpart(div1);
+}
+
 void AMapBuilderController::GridClick(AGridSpace* hitSpace)
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Click"));
 	for (int i = 0; i < gridSpaces.Num(); i++)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Click: %d"), i));
 		gridSpaces[i]->SetHighlight(HL_NONE);
 	}
 
 	hitSpace->SetHighlight(HL_SELECTED);
 
-	TArray<ADivider*> neighbors = hitSpace->GetNeighbors();
+	TArray<AConnector*> neighbors = hitSpace->GetNeighbors();
 
 	for (int i = 0; i < neighbors.Num(); i++)
 	{
-		neighbors[i]->destination->SetHighlight(HL_ADJACENT);
+		if (neighbors[i]->isCorner)
+		{
+			neighbors[i]->destination->SetHighlight(HL_CORNER);
+		}
+		else
+		{
+			neighbors[i]->destination->SetHighlight(HL_ADJACENT);
+		}
 	}
 }
 
+void AMapBuilderController::SaveMap(FString mapName)
+{
+	if (inputSpaceType == NONE || gridSpaces.Num() == 0)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Map has not been initialized.")));
+		return;
+	}
+	FString output = FString::Printf(TEXT("%i"), inputSpaceType);;
+	for (int i = 0; i < gridSpaces.Num(); i++)
+	{
+		output += '\n';
+		output += gridSpaces[i]->ToOutputStr();
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, output);
+
+	FString path = FPaths::GameDir();
+	path += "/Maps";
+
+	if (!FPlatformFileManager::Get().GetPlatformFile().DirectoryExists(*path))
+	{
+		FPlatformFileManager::Get().GetPlatformFile().CreateDirectory(*path);
+	}
+	
+	path += "/" + mapName + ".dndm";
+
+	FFileHelper::SaveStringToFile(output, *path);
+}
