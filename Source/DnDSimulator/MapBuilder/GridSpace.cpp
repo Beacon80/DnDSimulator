@@ -63,10 +63,10 @@ AConnector* AGridSpace::AddNeighbor(AGridSpace* neighbor, bool isCorner)
 	newConnector->destination = neighbor;
 	newConnector->isCorner = isCorner;
 	newConnector->SetActorHiddenInGame(true);
-	FString label = this->GetActorLabel();
+	FString label = "" + this->gsName;
 	label.Append("-");
-	label.Append(neighbor->GetActorLabel());
-	newConnector->SetActorLabel(label);
+	label.Append(neighbor->gsName);
+	newConnector->conName = label;
 
 	connectors.Add(newConnector);
 
@@ -125,11 +125,16 @@ void AGridSpace::SetHighlight(GridHighlight gh)
 
 FString AGridSpace::ToOutputStr()
 {
-	FString outputStr = this->GetActorLabel();
-	outputStr += ",";
+	FString outputStr = "" + this->gsName;
+	outputStr += "|";
 	outputStr += this->GetActorLocation().ToCompactString();
-	outputStr += ",";
+	outputStr += "|";
 	outputStr += FString::Printf(TEXT("%i%i%i"), roughSpace, allowMove, allowLOS);
+	for (int i = 0; i < connectors.Num(); i++)
+	{
+		outputStr += "|";
+		outputStr += connectors[i]->ToOutputStr();
+	}
 
 
 	return outputStr;

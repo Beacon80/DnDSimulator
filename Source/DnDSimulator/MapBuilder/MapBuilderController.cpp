@@ -105,7 +105,7 @@ void AMapBuilderController::BuildHexes()
 			int index = gridSpaces.Num();
 			hexRef->SetIndex(index);
 			FString newName = ConvertIndexToCoords(index);
-			hexRef->SetActorLabel(newName);
+			hexRef->gsName = newName;
 			gridSpaces.Add(hexRef);
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f, %f"), xLoc, yLoc));
 
@@ -135,7 +135,7 @@ void AMapBuilderController::BuildSquares()
 			int index = gridSpaces.Num();
 			hexRef->SetIndex(index);
 			FString newName = ConvertIndexToCoords(index);
-			hexRef->SetActorLabel(newName);
+			hexRef->gsName = newName;
 			gridSpaces.Add(hexRef);
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f, %f"), xLoc, yLoc));
 
@@ -276,7 +276,7 @@ void AMapBuilderController::SaveMap(FString mapName)
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, output);
 
-	FString path = FPaths::GameDir();
+	FString path = FPaths::ProjectDir();
 	path += "/Maps";
 
 	if (!FPlatformFileManager::Get().GetPlatformFile().DirectoryExists(*path))

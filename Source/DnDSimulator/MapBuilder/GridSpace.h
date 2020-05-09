@@ -56,6 +56,8 @@ public:
 		TArray<AConnector*> connectors;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Grid Space Attribute")
+		FString gsName;
+	UPROPERTY(BlueprintReadWrite, Category = "Grid Space Attribute")
 		bool roughSpace = false;
 	UPROPERTY(BlueprintReadWrite, Category = "Grid Space Attribute")
 		bool allowMove = true;

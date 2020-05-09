@@ -23,12 +23,16 @@ public:
 	void setCounterpart(AConnector* newCounterpart);
 
 	UPROPERTY(BlueprintReadWrite, Category = "Connector Attribute")
+		FString conName;
+	UPROPERTY(BlueprintReadWrite, Category = "Connector Attribute")
 		bool allowMove = true;
 	UPROPERTY(BlueprintReadWrite, Category = "Connector Attribute")
 		bool allowLOS = true;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Connector Attribute")
 		AConnector* counterpart;
+
+	FString ToOutputStr();
 
 protected:
 	// Called when the game starts or when spawned

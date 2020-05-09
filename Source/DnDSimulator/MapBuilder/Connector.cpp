@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Connector.h"
+#include "GridSpace.h"
 
 // Sets default values
 AConnector::AConnector()
@@ -30,3 +31,17 @@ void AConnector::setCounterpart(AConnector* newCounterpart)
 	counterpart = newCounterpart;
 }
 
+
+FString AConnector::ToOutputStr()
+{
+	FString outputStr = "" + this->conName;
+	outputStr += "~";
+	outputStr += this->GetActorLocation().ToCompactString();
+	outputStr += "~";
+	outputStr += FString::Printf(TEXT("%i%i"), allowMove, allowLOS);
+	outputStr += "~";
+	outputStr += FString::Printf(TEXT("%i"), destination->GetIndex());
+
+
+	return outputStr;
+}
