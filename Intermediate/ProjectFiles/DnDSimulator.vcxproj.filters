@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\DnDSimulator.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{6E88D5B8-14F3-449E-9523-3415EE1A4DA7}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\DnDSimulator.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\DnDSimulatorEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\README.md" />
+    <Filter Include="Config">
+      <UniqueIdentifier>{8FC3E282-E36A-45ED-AAF6-ECCFAA76A64E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\DnDSimulator">
+      <UniqueIdentifier>{A6457A0F-4011-44B7-A49B-89EE1337D2B3}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\DnDSimulator\DnDSimulator.Build.cs">
+      <Filter>Source\DnDSimulator</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\DnDSimulator\DnDSimulator.cpp">
+      <Filter>Source\DnDSimulator</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\DnDSimulator\DnDSimulator.h">
+      <Filter>Source\DnDSimulator</Filter>
+    </ClInclude>
+    <Filter Include="Source\DnDSimulator\BattleSimulator">
+      <UniqueIdentifier>{BC674DDB-D766-41B5-956E-3E038CFDD6A0}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\DnDSimulator\BattleSimulator\BattleController.cpp">
+      <Filter>Source\DnDSimulator\BattleSimulator</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\DnDSimulator\BattleSimulator\BattleController.h">
+      <Filter>Source\DnDSimulator\BattleSimulator</Filter>
+    </ClInclude>
+    <Filter Include="Source\DnDSimulator\MapBuilder">
+      <UniqueIdentifier>{2171CE25-EFC1-45FB-9CDA-BFDAA9D2A720}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\DnDSimulator\MapBuilder\Connector.cpp">
+      <Filter>Source\DnDSimulator\MapBuilder</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\DnDSimulator\MapBuilder\Connector.h">
+      <Filter>Source\DnDSimulator\MapBuilder</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\DnDSimulator\MapBuilder\GridSpace.cpp">
+      <Filter>Source\DnDSimulator\MapBuilder</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\DnDSimulator\MapBuilder\GridSpace.h">
+      <Filter>Source\DnDSimulator\MapBuilder</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\DnDSimulator\MapBuilder\MapBuilderController.cpp">
+      <Filter>Source\DnDSimulator\MapBuilder</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\DnDSimulator\MapBuilder\MapBuilderController.h">
+      <Filter>Source\DnDSimulator\MapBuilder</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source\DnDSimulator\AllLevels">
+      <UniqueIdentifier>{b26e59ed-aa0c-472c-92e4-94cecbfaf45e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\DnDSimulator\AllLevels\CameraPawn.h">
+      <Filter>Source\DnDSimulator\AllLevels</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\DnDSimulator\AllLevels\CameraPawn.cpp">
+      <Filter>Source\DnDSimulator\AllLevels</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
