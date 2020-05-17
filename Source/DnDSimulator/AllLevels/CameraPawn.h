@@ -2,13 +2,11 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
-
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-#include "Engine/EngineTypes.h"
 
+#include "CoreMinimal.h"
+#include "GameFramework/Pawn.h"
 #include "CameraPawn.generated.h"
 
 UCLASS()

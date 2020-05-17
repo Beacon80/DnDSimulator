@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\DnDSimulator.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{6E88D5B8-14F3-449E-9523-3415EE1A4DA7}</UniqueIdentifier>
+      <UniqueIdentifier>{A52D6432-48C1-4CB5-9FE0-49DC152ECA93}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\DnDSimulator.Target.cs">
       <Filter>Source</Filter>
@@ -13,7 +13,7 @@
     </None>
     <None Include="..\..\README.md" />
     <Filter Include="Config">
-      <UniqueIdentifier>{8FC3E282-E36A-45ED-AAF6-ECCFAA76A64E}</UniqueIdentifier>
+      <UniqueIdentifier>{BC37E550-1759-443D-9DC3-15A1744A3068}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -31,7 +31,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\DnDSimulator">
-      <UniqueIdentifier>{A6457A0F-4011-44B7-A49B-89EE1337D2B3}</UniqueIdentifier>
+      <UniqueIdentifier>{3CF69D50-4ECE-426E-962C-F409379BE77D}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\DnDSimulator\DnDSimulator.Build.cs">
       <Filter>Source\DnDSimulator</Filter>
@@ -42,17 +42,17 @@
     <ClInclude Include="..\..\Source\DnDSimulator\DnDSimulator.h">
       <Filter>Source\DnDSimulator</Filter>
     </ClInclude>
-    <Filter Include="Source\DnDSimulator\BattleSimulator">
-      <UniqueIdentifier>{BC674DDB-D766-41B5-956E-3E038CFDD6A0}</UniqueIdentifier>
+    <Filter Include="Source\DnDSimulator\AllLevels">
+      <UniqueIdentifier>{6201B069-53A0-4D6D-8815-50B0AD99F03E}</UniqueIdentifier>
     </Filter>
-    <ClCompile Include="..\..\Source\DnDSimulator\BattleSimulator\BattleController.cpp">
-      <Filter>Source\DnDSimulator\BattleSimulator</Filter>
+    <ClCompile Include="..\..\Source\DnDSimulator\AllLevels\CameraPawn.cpp">
+      <Filter>Source\DnDSimulator\AllLevels</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\Source\DnDSimulator\BattleSimulator\BattleController.h">
-      <Filter>Source\DnDSimulator\BattleSimulator</Filter>
+    <ClInclude Include="..\..\Source\DnDSimulator\AllLevels\CameraPawn.h">
+      <Filter>Source\DnDSimulator\AllLevels</Filter>
     </ClInclude>
     <Filter Include="Source\DnDSimulator\MapBuilder">
-      <UniqueIdentifier>{2171CE25-EFC1-45FB-9CDA-BFDAA9D2A720}</UniqueIdentifier>
+      <UniqueIdentifier>{37800B59-5D86-4F00-BF13-56AD6BC9BDF6}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\DnDSimulator\MapBuilder\Connector.cpp">
       <Filter>Source\DnDSimulator\MapBuilder</Filter>
@@ -72,20 +72,5 @@
     <ClInclude Include="..\..\Source\DnDSimulator\MapBuilder\MapBuilderController.h">
       <Filter>Source\DnDSimulator\MapBuilder</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Source\DnDSimulator\AllLevels">
-      <UniqueIdentifier>{b26e59ed-aa0c-472c-92e4-94cecbfaf45e}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\DnDSimulator\AllLevels\CameraPawn.h">
-      <Filter>Source\DnDSimulator\AllLevels</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\DnDSimulator\AllLevels\CameraPawn.cpp">
-      <Filter>Source\DnDSimulator\AllLevels</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

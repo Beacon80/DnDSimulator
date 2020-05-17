@@ -6,7 +6,6 @@
 // Sets default values
 ACameraPawn::ACameraPawn()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Constructor")));
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -19,7 +18,7 @@ ACameraPawn::ACameraPawn()
 	OurCameraSpringArm->bEnableCameraLag = true;
 	OurCameraSpringArm->CameraLagSpeed = 3.0f;
 
-	OurCamera = CreateAbstractDefaultSubobject<UCameraComponent>(TEXT("GameCamera"));
+	OurCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("GameCamera"));
 	OurCamera->SetupAttachment(OurCameraSpringArm, USpringArmComponent::SocketName);
 
 	// Take control of default player
@@ -38,8 +37,6 @@ void ACameraPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Tick")));
-
 	// Zoom in if button is down
 	if (bZoomingIn)
 	{
@@ -51,7 +48,7 @@ void ACameraPawn::Tick(float DeltaTime)
 	}
 
 	ZoomFactor = FMath::Clamp<float>(ZoomFactor, 0.0f, 1.0f);
-	
+
 	// Blend our camera's FOV and our SpringArm's length baed on ZoomFactor
 	OurCamera->FieldOfView = FMath::Lerp<float>(ZoomFOVMax, ZoomFOVMin, ZoomFactor);
 	OurCameraSpringArm->TargetArmLength = FMath::Lerp<float>(ZoomBaseDist, ZoomBaseDist * ZoomInBound, ZoomFactor);
@@ -81,8 +78,6 @@ void ACameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Setup")));
-
 	InputComponent->BindAction("ZoomIn", IE_Pressed, this, &ACameraPawn::ZoomIn);
 	InputComponent->BindAction("ZoomOut", IE_Released, this, &ACameraPawn::ZoomOut);
 
@@ -95,7 +90,6 @@ void ACameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 // Input functions
 void ACameraPawn::MoveForward(float AxisValue)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("MoveForward")));
 	MovementInput.X = FMath::Clamp<float>(AxisValue, -1.0f, 1.0f);
 }
 void ACameraPawn::MoveRight(float AxisValue)
