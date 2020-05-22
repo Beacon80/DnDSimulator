@@ -73,4 +73,25 @@
       <Filter>Source\DnDSimulator\MapBuilder</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source\DnDSimulator\BattleSimulator">
+      <UniqueIdentifier>{45ba25bf-64ca-4ff4-b251-44d85d462ad4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\DnDSimulator\BattleSimulator\GridMap.h">
+      <Filter>Source\DnDSimulator\BattleSimulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\DnDSimulator\AllLevels\MyUtilities.h">
+      <Filter>Source\DnDSimulator\AllLevels</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\DnDSimulator\BattleSimulator\GridMap.cpp">
+      <Filter>Source\DnDSimulator\BattleSimulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\DnDSimulator\AllLevels\MyUtilities.cpp">
+      <Filter>Source\DnDSimulator\AllLevels</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>

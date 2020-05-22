@@ -61,7 +61,14 @@ void AMapBuilderController::CreateMap(FString inputSpaceTypeStr, int newDimensio
 	{
 		inputSpaceType = SQUARE;
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Square"));
-		BuildSquares();
+		if (GridSquare)
+		{
+			BuildSquares();
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("No Square Blueprint"));
+		}
 	}
 
 	else
@@ -137,14 +144,14 @@ void AMapBuilderController::BuildSquares()
 			FString newName = ConvertIndexToCoords(index);
 			hexRef->gsName = newName;
 			gridSpaces.Add(hexRef);
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f, %f"), xLoc, yLoc));
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f, %f"), xLoc, yLoc));
 
 			CalculateNeighborsSquare(index);
 		}
 	}
 
 	int midSpaceIndex = numSpaces / 2;
-	gridSpaces[midSpaceIndex]->MoveCameraToSpace();
+	//gridSpaces[midSpaceIndex]->MoveCameraToSpace();
 }
 
 FString AMapBuilderController::ConvertIndexToCoords(int index)

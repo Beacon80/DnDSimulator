@@ -26,7 +26,7 @@ public:
 	// Sets default values for this actor's properties
 	AMapBuilderController();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Map")
 		void CreateMap(FString inputSpaceTypeStr, int newDimension);
 
 	UFUNCTION(BlueprintCallable, Category = "Click")
