@@ -3,6 +3,7 @@
 
 
 #include "HAL/FileManagerGeneric.h"
+#include "Misc/Paths.h"
 #include "MyUtilities.h"
 
 // Sets default values
@@ -19,7 +20,9 @@ TArray<FString> AMyUtilities::GetFileNamesByDirectory(FString directory, FString
 	TArray<FString> retList;
 
 	FFileManagerGeneric fileManager = FFileManagerGeneric();
-	fileManager.FindFiles(retList, *directory, *extension);
+	FPaths fpaths = FPaths();
+	FString fullPath = fpaths.GetPath(fpaths.GetProjectFilePath()) + directory;
+	fileManager.FindFiles(retList, *fullPath, *extension);
 
 	return retList;
 }
