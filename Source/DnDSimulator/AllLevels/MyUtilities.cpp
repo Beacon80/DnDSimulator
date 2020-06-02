@@ -2,9 +2,10 @@
 //	be run in C++
 
 
+#include "MyUtilities.h"
 #include "HAL/FileManagerGeneric.h"
 #include "Misc/Paths.h"
-#include "MyUtilities.h"
+#include "Misc/FileHelper.h"
 
 // Sets default values
 AMyUtilities::AMyUtilities()
@@ -20,9 +21,37 @@ TArray<FString> AMyUtilities::GetFileNamesByDirectory(FString directory, FString
 	TArray<FString> retList;
 
 	FFileManagerGeneric fileManager = FFileManagerGeneric();
-	FPaths fpaths = FPaths();
-	FString fullPath = fpaths.GetPath(fpaths.GetProjectFilePath()) + directory;
+	FString fullPath = FPaths::Combine(FPaths::ProjectDir(), directory);
 	fileManager.FindFiles(retList, *fullPath, *extension);
 
 	return retList;
+}
+
+FString AMyUtilities::GetTextFromFile(FString directory, FString filename)
+{
+	FString fullText;
+
+	FFileManagerGeneric fileManager = FFileManagerGeneric();
+	FString fullPath = FPaths::Combine(FPaths::ProjectDir(), directory + filename);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, fullPath);
+	if (fileManager.FileExists(*fullPath))
+	{
+		//FArchive* fArchive = fileManager.CreateFileReader(*fullPath);
+		FFileHelper::LoadFileToString(fullText, *fullPath);
+	}
+
+	return fullText;
+
+}
+
+UTexture2D* AMyUtilities::LoadTextureFromPath(FString directory, FString filename)
+{
+	FFileManagerGeneric fileManager = FFileManagerGeneric();
+	FString fullPath = FPaths::Combine(FPaths::ProjectDir(), directory + filename);
+	if (fileManager.FileExists(*fullPath))
+	{
+		return NULL;
+	}
+
+	return Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, *fullPath));
 }

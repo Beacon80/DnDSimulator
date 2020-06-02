@@ -15,6 +15,11 @@ public:
 	// Sets default values for this actor's properties
 	AMyUtilities();
 
-	UFUNCTION(BlueprintCallable, Category = "Click")
-		TArray<FString> GetFileNamesByDirectory(FString directory, FString extension);
+	UFUNCTION(BlueprintCallable, Category = "FileManager")
+		static TArray<FString> GetFileNamesByDirectory(FString directory, FString extension);
+
+	UFUNCTION(BlueprintCallable, Category = "FileManager")
+		static FString GetTextFromFile(FString directory, FString filename);
+
+	static UTexture2D* LoadTextureFromPath(FString directory, FString filename);
 };

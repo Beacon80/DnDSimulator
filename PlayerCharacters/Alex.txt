@@ -1,0 +1,13 @@
+Name: Alex
+Portrait: Fighter_p.bmp
+Model: Fighter
+
+Level: Fighter,1
+L-HP: 8
+
+STR: 16
+DEX: 15
+CON: 14
+INT: 11
+WIS: 6
+CHA: 8

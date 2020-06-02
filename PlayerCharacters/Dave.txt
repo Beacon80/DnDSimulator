@@ -1,0 +1,13 @@
+Name: Dave
+Portrait: Bard_p.bmp
+Model: Bard
+
+Level: Fighter,1
+L-HP: 8
+
+STR: 12
+DEX: 12
+CON: 12
+INT: 12
+WIS: 12
+CHA: 12

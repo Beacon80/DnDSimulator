@@ -1,0 +1,13 @@
+Name: Charlie
+Portrait: Rogue_p.bmp
+Model: Rogue
+
+Level: Fighter,1
+L-HP: 8
+
+STR: 12
+DEX: 12
+CON: 12
+INT: 12
+WIS: 12
+CHA: 12

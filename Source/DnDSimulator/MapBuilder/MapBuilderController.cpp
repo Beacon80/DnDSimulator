@@ -139,12 +139,13 @@ void AMapBuilderController::BuildSquares()
 		{
 			float xLoc = (float)i * SQUARE_DISTANCE;
 			AGridSpace* hexRef = GetWorld()->SpawnActor<AGridSpace>(GridSquare, FVector(xLoc, yLoc, ZLOC), FRotator(), spawnParams);
+			hexRef->SetReplicates(true);
 			int index = gridSpaces.Num();
 			hexRef->SetIndex(index);
 			FString newName = ConvertIndexToCoords(index);
 			hexRef->gsName = newName;
 			gridSpaces.Add(hexRef);
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f, %f"), xLoc, yLoc));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f, %f"), xLoc, yLoc));
 
 			CalculateNeighborsSquare(index);
 		}
