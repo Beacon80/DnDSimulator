@@ -2,6 +2,7 @@
 
 #include "Campaign.h"
 #include "../AllLevels/MyUtilities.h"
+#include "Engine/Public/Net/UnrealNetwork.h"
 
 // Sets default values
 ACampaign::ACampaign()
@@ -41,12 +42,11 @@ void ACampaign::LoadFromFile(FString campaignFile)
 		lines[i].ParseIntoArray(keyval, *separator, true);
 		if (keyval[0].Equals("PC"))
 		{
-			AHero* pcRef = GetWorld()->SpawnActor<AHero>(AHeroBP, FVector(0.0f, 0.0f, -200.0f), FRotator(0.f, 0.f, 0.f), spawnParams);
+			AHero* pcRef = GetWorld()->SpawnActor<AHero>(AHeroBP, FVector(0.0f + i * 100.0f, 0.0f, -200.0f), FRotator(0.f, 0.f, 0.f), spawnParams);
 			bool success = false;
 			success = pcRef->LoadFromFile(keyval[1]);
 			if (success)
 			{
-				pcRef->SetReplicates(true);
 				availableCharacters.Add(pcRef);
 				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%i"), i));
 			}

@@ -48,6 +48,7 @@ class DNDSIMULATOR_API AHero : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AHero();
+	AActor *Owner;
 
 	bool LoadFromFile(FString characterFile);
 	void updateModifiers();
@@ -67,8 +68,13 @@ public:
 
 	int curHP, maxHP;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Display")
+	UPROPERTY(BlueprintReadWrite, replicated, Category = "Display")
+	//UPROPERTY(replicated, Category = "Display")
 		FString pcName;
+	UFUNCTION(BlueprintCallable, Category = "Display")
+		FString GetPCName();
+	UFUNCTION(BlueprintCallable, Category = "Display")
+		void SetPCName(FString newName);
 	UPROPERTY(BlueprintReadOnly, Category = "Display")
 		UTexture2D* portrait;
 	UFUNCTION(BlueprintCallable, Category = "Attributes")

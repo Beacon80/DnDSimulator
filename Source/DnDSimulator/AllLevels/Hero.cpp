@@ -11,6 +11,7 @@ AHero::AHero()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	SetReplicates(true);
 
 	// Initialize the attribute map if needed
 	if (attMap.Num() == 0) {
@@ -29,6 +30,8 @@ AHero::AHero()
 		attMap.Add("CHA", ATT_CHA);
 	}
 }
+
+void AHero::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const { Super::GetLifetimeReplicatedProps(OutLifetimeProps); DOREPLIFETIME(AHero, Owner); }
 
 bool AHero::LoadFromFile(FString characterFile)
 {
@@ -184,6 +187,9 @@ void AHero::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+FString AHero::GetPCName() { return pcName; }
+void AHero::SetPCName(FString newName) { pcName = newName; }
 
 FString AHero::StatToString(AbilityScore as)
 {
